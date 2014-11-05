@@ -552,7 +552,6 @@ public class MemoryDatabase extends CommonDatabase {
         return response;
     }
     
-  //fake nonce calculation to static value based on example in docs
     private BSONObject commandPing(Channel channel) {
         BSONObject response = new BasicBSONObject();
         Utils.markOkay(response);
