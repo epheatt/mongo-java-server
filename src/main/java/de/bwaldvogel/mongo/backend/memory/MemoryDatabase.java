@@ -163,7 +163,15 @@ public class MemoryDatabase extends CommonDatabase {
     public BSONObject handleCommand(Channel channel, String command, BSONObject query) throws MongoServerException {
 
         // getlasterror must not clear the last error
-        if (command.equalsIgnoreCase("getlasterror")) {
+        if (command.equalsIgnoreCase("getnonce")) {
+            return commandGetNonce(channel);
+        } else if (command.equalsIgnoreCase("ping")) {
+            return commandPing(channel);
+        } else if (command.equalsIgnoreCase("logout")) {
+            return commandLogout(channel);
+        } else if (command.equalsIgnoreCase("authenticate")) {
+            return commandAuthenticate(channel, command, query);
+        } else if (command.equalsIgnoreCase("getlasterror")) {
             return commandGetLastError(channel, command, query);
         } else if (command.equalsIgnoreCase("getpreverror")) {
             return commandGetPrevError(channel, command, query);
@@ -523,6 +531,34 @@ public class MemoryDatabase extends CommonDatabase {
         results.set(results.size() - 1, result);
     }
 
+    //fake nonce calculation to static value based on example in docs
+    private BSONObject commandGetNonce(Channel channel) {
+        BSONObject response = new BasicBSONObject("nonce", "7ca422a24f326f2a");
+        Utils.markOkay(response);
+        return response;
+    }
+
+    //fake authenticate to always succeed
+    private BSONObject commandAuthenticate(Channel channel, String command, BSONObject query)
+            throws MongoServerException {
+        BSONObject response = new BasicBSONObject();
+        Utils.markOkay(response);
+        return response;
+    }
+
+    private BSONObject commandLogout(Channel channel) {
+        BSONObject response = new BasicBSONObject();
+        Utils.markOkay(response);
+        return response;
+    }
+    
+  //fake nonce calculation to static value based on example in docs
+    private BSONObject commandPing(Channel channel) {
+        BSONObject response = new BasicBSONObject();
+        Utils.markOkay(response);
+        return response;
+    }
+    
     private BSONObject commandGetLastError(Channel channel, String command, BSONObject query)
             throws MongoServerException {
         Iterator<String> it = query.keySet().iterator();
